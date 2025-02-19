@@ -1,25 +1,30 @@
 package upf.at.project.services;
 
-import javax.ws.rs.*;
+import java.util.List;
 
-import upf.at.project.clients.Clients;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+
+import upf.at.project.clients.User;
+import upf.at.project.clients.Users;
 
 @Path("/clients")
 public class ClientsService {
 	
-	static Clients clients = new Clients();
+	static Users clients = new Users();
 	@POST
 	@Path("/subscribe")
+	@Consumes(MediaType.APPLICATION_JSON)
 	//Consumes the client number, telegram token and list of stations ids
-	public int subscribe(Clients client) {
-		return 0;
+	public void subscribe(User client) {
+		clients.subscribeClient(client);
 	}
 	
 	@GET
 	@Path("/getClients")
-	//Consumes the client number
+	@Produces(MediaType.APPLICATION_JSON)
 	//Produces telegram token and stations ids
-	public int getClients() {
-		return 0;
+	public List<User> getClients() {
+		return clients.getClients();
 	}
 }
