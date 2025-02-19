@@ -1,5 +1,5 @@
 package upf.at.project.clients;
 
-public class ClientsController {
+public class NotifierRestClient {
 
 }
