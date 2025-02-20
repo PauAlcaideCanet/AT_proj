@@ -12,20 +12,21 @@
     </style>
 </head>
 <body>
-    <h2>AJAX Request</h2>
-    <button type="button" onclick="load()">Make Request</button>
-    
-    <h3>Send JSON Data</h3>
+   
+    <h3>Fill your data to subscribe</h3>
     <label for="phone">Phone:</label>
     <input type="text" id="phone" placeholder="Enter phone number">
     
     <label for="telegramToken">Telegram Token:</label>
     <input type="text" id="telegramToken" placeholder="Enter Telegram Token">
     
-    <label for="stationsIds">Station IDs (comma separated):</label>
-    <input type="text" id="stationsIds" placeholder="e.g. 123,456,789">
+    <label for="subStationsId">Station IDs (comma separated):</label>
+    <input type="text" id="subStationsId" placeholder="e.g. 1,13,46,78">
     
-    <button type="button" onclick="sendJson()">Send JSON Data</button>
+    <button type="button" onclick="sendJson()">Subscribe</button>
+	
+	<h2>Clients</h2>
+	<button type="button" onclick="load()">Show Clients</button>
     
     <div id="sectionId">Response will appear here</div>
 
@@ -34,10 +35,19 @@
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function() {
                 if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                    document.getElementById("sectionId").innerHTML = xmlhttp.responseText;
-                }
+					try {
+		                var data = JSON.parse(xmlhttp.responseText);
+		                document.getElementById("sectionId").innerHTML =
+	                    	"<pre style='background-color: #f4f4f4; padding: 10px; border-radius: 5px; font-family: monospace;'>" +
+	                    	JSON.stringify(data, null, 4) + "</pre>";
+		            } catch (error) {
+		                console.error("Invalid JSON response", error);
+		                document.getElementById("sectionId").innerHTML =
+		                    "<p style='color: red;'>Error: Invalid JSON response</p>";
+		            }
+				}
             };
-            xmlhttp.open("GET", "ban/stations/list", true);
+            xmlhttp.open("GET", "http://localhost:8080/at-project-0.1/at/clients/getClients", true);
             xmlhttp.send();
         }
 
@@ -45,7 +55,7 @@
             var params = {
                 "phone": document.getElementById("phone").value,
                 "telegramToken": document.getElementById("telegramToken").value,
-                "stationsIds": document.getElementById("stationsIds").value.replace(/\s/g, "").split(",")
+                "subStationsId": document.getElementById("subStationsId").value.replace(/\s+/g, "").split(",").map(Number)
             };
             
             var xmlhttp = new XMLHttpRequest();
@@ -54,7 +64,7 @@
                     document.getElementById("sectionId").innerHTML = xmlhttp.responseText;
                 }
             };
-            xmlhttp.open("POST", "http://localhost:8080", true); //TODO
+            xmlhttp.open("POST", "http://localhost:8080/at-project-0.1/at/clients/subscribe", true); //TODO
             xmlhttp.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
             xmlhttp.send(JSON.stringify(params));
         }
