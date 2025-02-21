@@ -2,24 +2,24 @@ package upf.at.project.clients;
 
 import java.util.*;
 
-public class Client {
-	private String phone;
+public class User {
+	private int phone;
 	private List<Integer> subStationsId;
 	private String telegramToken;
 	
 	//Constructors
-	public Client() {
+	public User() {
 		
 	}
 	
-	public Client(String phone, List<Integer> subStationsId, String telegramToken) {
+	public User(int phone, List<Integer> subStationsId, String telegramToken) {
 		this.phone = phone;
 		this.subStationsId = subStationsId;
 		this.telegramToken = telegramToken;
 	}
 	
 	//Getters
-	public String getPhone(){
+	public int getPhone(){
 		return phone;
 	}
 	
@@ -32,7 +32,7 @@ public class Client {
 	}
 	
 	//Setters
-	public void setPhone(String phone) {
+	public void setPhone(int phone) {
 		this.phone = phone;
 	}
 
