@@ -12,42 +12,84 @@
     </style>
 </head>
 <body>
-   
-    <h3>Fill your data to subscribe</h3>
-    <label for="phone">Phone:</label>
-    <input type="text" id="phone" placeholder="Enter phone number">
+    <h2>Select Option</h2>
+    <button type="button" onclick="showClients()">Clients</button>
+    <button type="button" onclick="showStations()">Stations</button>
     
-    <label for="telegramToken">Telegram Token:</label>
-    <input type="text" id="telegramToken" placeholder="Enter Telegram Token">
-    
-    <label for="subStationsId">Station IDs (comma separated):</label>
-    <input type="text" id="subStationsId" placeholder="e.g. 1,13,46,78">
-    
-    <button type="button" onclick="sendJson()">Subscribe</button>
-	
-	<h2>Clients</h2>
-	<button type="button" onclick="load()">Show Clients</button>
-    
-    <div id="sectionId">Response will appear here</div>
+    <div id="content" style="display:none;">
+        
+        <div id="formSection" style="display: none;">
+            <h3>Fill your data to subscribe</h3>
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" placeholder="Enter phone number">
+            
+            <label for="telegramToken">Telegram Token:</label>
+            <input type="text" id="telegramToken" placeholder="Enter Telegram Token">
+            
+            <label for="subStationsId">Station IDs (comma separated):</label>
+            <input type="text" id="subStationsId" placeholder="e.g. 1,13,46,78">
+            
+            <button type="button" onclick="sendJson()">Subscribe</button>
+        </div>
+        <h2 id="title"></h2>
+        <button type="button" id="requestButton"></button>
+        <div id="sectionId">Response will appear here</div>
+    </div>
 
     <script>
-        function load() {
+        function showClients() {
+            document.getElementById("content").style.display = "block";
+            document.getElementById("title").innerText = "Clients";
+            document.getElementById("requestButton").innerText = "Show Clients";
+            document.getElementById("requestButton").setAttribute("onclick", "loadClients()");
+            document.getElementById("formSection").style.display = "block";
+        }
+
+        function showStations() {
+            document.getElementById("content").style.display = "block";
+            document.getElementById("title").innerText = "Stations";
+            document.getElementById("requestButton").innerText = "Show Stations";
+            document.getElementById("requestButton").setAttribute("onclick", "loadStations()");
+            document.getElementById("formSection").style.display = "none";
+        }
+
+        function loadClients() {
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function() {
                 if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-					try {
-		                var data = JSON.parse(xmlhttp.responseText);
-		                document.getElementById("sectionId").innerHTML =
-	                    	"<pre style='background-color: #f4f4f4; padding: 10px; border-radius: 5px; font-family: monospace;'>" +
-	                    	JSON.stringify(data, null, 4) + "</pre>";
-		            } catch (error) {
-		                console.error("Invalid JSON response", error);
-		                document.getElementById("sectionId").innerHTML =
-		                    "<p style='color: red;'>Error: Invalid JSON response</p>";
-		            }
-				}
+                    try {
+                        var data = JSON.parse(xmlhttp.responseText);
+                        document.getElementById("sectionId").innerHTML =
+                            "<pre style='background-color: #f4f4f4; padding: 10px; border-radius: 5px; font-family: monospace;'>" +
+                            JSON.stringify(data, null, 4) + "</pre>";
+                    } catch (error) {
+                        console.error("Invalid JSON response", error);
+                        document.getElementById("sectionId").innerHTML =
+                            "<p style='color: red;'>Error: Invalid JSON response</p>";
+                    }
+                }
             };
             xmlhttp.open("GET", "http://localhost:8080/at-project-0.1/at/clients/getClients", true);
+            xmlhttp.send();
+        }
+
+        function loadStations() {
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    try {
+                        var data = JSON.parse(xmlhttp.responseText);
+                        document.getElementById("sectionId").innerHTML =
+                            "<pre style='background-color: #f4f4f4; padding: 10px; border-radius: 5px; font-family: monospace;'>" +
+                            JSON.stringify(data, null, 4) + "</pre>";
+                    } catch (error) {
+                        console.error("Invalid JSON response", error);
+                        document.getElementById("sectionId").innerHTML =
+                            "<p style='color: red;'>Error: Invalid JSON response</p>";
+                    }
+                }
+            };
+            xmlhttp.open("GET", "http://localhost:8080/at-project-0.1/at/stations/get", true);
             xmlhttp.send();
         }
 
@@ -64,7 +106,7 @@
                     document.getElementById("sectionId").innerHTML = xmlhttp.responseText;
                 }
             };
-            xmlhttp.open("POST", "http://localhost:8080/at-project-0.1/at/clients/subscribe", true); //TODO
+            xmlhttp.open("POST", "http://localhost:8080/at-project-0.1/at/clients/subscribe", true);
             xmlhttp.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
             xmlhttp.send(JSON.stringify(params));
         }
