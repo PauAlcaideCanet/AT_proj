@@ -37,12 +37,14 @@ public class Message {
 		return "Message [chat_id=" + chat_id + ", text=" + text + "]";
 	}
 
-	public void new_message() {
+	public void new_message(String token) {
 		Client client = ClientBuilder.newClient();
 		Message message = new Message(chat_id, text);
 		
+		String botPath = "/bot" + token + "/sendMessage";
+		
 		WebTarget targetSendMessage = client.target("https://api.telegram.org")
-				.path("/bot7876711603:AAG7eo6_kzwJybNvD7RH6TnemkIqehnAwyA/sendMessage");
+				.path(botPath);
 		
 		String response = targetSendMessage.request()
 				.post(Entity.entity(message, MediaType.APPLICATION_JSON_TYPE), String.class);

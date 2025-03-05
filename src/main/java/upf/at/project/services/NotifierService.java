@@ -58,7 +58,7 @@ public class NotifierService {
 		
 		Message message = new Message(chatID, formattedAvailable.toString());
 		System.out.println("Avaliable: " + formattedAvailable);
-		message.new_message();
+		message.new_message(client.getTelegramToken());
 	}
 	
 	@GET
@@ -67,6 +67,20 @@ public class NotifierService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	//Produces telegram message with real time air quality information
 	public void getAirQuality(@PathParam("ip") String ip, @PathParam("phone") int phone) {
+		
+		List<User> clients = ClientsService.clients.getClients();
+		User client = null;
+		
+		for(User u : clients) {
+			if(u.getPhone() == phone) {
+				client = u;
+			}
+		}
+		
+		if (client == null) {
+	        System.out.println("User with phone " + phone + " not found.");
+	        return;
+	    }
 		
 		Aqi aqi = new Aqi();
 		// 1. Get City from IP
@@ -91,6 +105,6 @@ public class NotifierService {
                              "AQI: " + aqindex + " (" + aqiDescription + ")";
                 
         Message message = new Message(chatID, messageText);
-        message.new_message();
+        message.new_message(client.getTelegramToken());
         System.out.println("Sent AQI message: " + messageText);	}
 }
