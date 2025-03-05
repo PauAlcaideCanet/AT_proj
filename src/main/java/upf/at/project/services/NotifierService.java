@@ -23,7 +23,7 @@ public class NotifierService {
 	//Consumes phone number
 	//@Consumes(MediaType.APPLICATION_JSON)
 	//Produces telegram message with free slots on the suscribed stations
-	public void getSlots(@PathParam("phone") int phone) {
+	public String getSlots(@PathParam("phone") int phone) {
 		
 		List<User> clients = ClientsService.clients.getClients();
 		User client = null;
@@ -36,7 +36,7 @@ public class NotifierService {
 		
 		if (client == null) {
 	        System.out.println("User with phone " + phone + " not found.");
-	        return;
+	        return "User with phone " + phone + " not found.";
 	    }
 		
 		data = bicing.getData();
@@ -59,6 +59,8 @@ public class NotifierService {
 		Message message = new Message(chatID, formattedAvailable.toString());
 		System.out.println("Avaliable: " + formattedAvailable);
 		message.new_message(client.getTelegramToken());
+		
+		return "Avaliable: " + formattedAvailable;
 	}
 	
 	@GET
@@ -66,7 +68,7 @@ public class NotifierService {
 	//Consumes client device ip and phone number
 	@Consumes(MediaType.APPLICATION_JSON)
 	//Produces telegram message with real time air quality information
-	public void getAirQuality(@PathParam("ip") String ip, @PathParam("phone") int phone) {
+	public String getAirQuality(@PathParam("ip") String ip, @PathParam("phone") int phone) {
 		
 		List<User> clients = ClientsService.clients.getClients();
 		User client = null;
@@ -79,7 +81,7 @@ public class NotifierService {
 		
 		if (client == null) {
 	        System.out.println("User with phone " + phone + " not found.");
-	        return;
+	        return "User with phone " + phone + " not found.";
 	    }
 		
 		Aqi aqi = new Aqi();
@@ -87,14 +89,14 @@ public class NotifierService {
         String city = aqi.getCityFromIP(ip);
         if (city == null) {
             System.out.println("Failed to get city from IP.");
-            return;
+            return "Failed to get city from IP.";
         }
 
         // 2. Get AQI from City
         int aqindex = aqi.getAQIFromCity(city);
         if (aqindex == -1) {
             System.out.println("Failed to get AQI for city: " + city);
-            return;
+            return "Failed to get AQI for city: " + city;
         }
 
         // 3. Translate AQI to Description
@@ -106,5 +108,8 @@ public class NotifierService {
                 
         Message message = new Message(chatID, messageText);
         message.new_message(client.getTelegramToken());
-        System.out.println("Sent AQI message: " + messageText);	}
+        System.out.println("Sent AQI message: " + messageText);
+        
+        return messageText;
+	}
 }

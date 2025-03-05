@@ -15,6 +15,7 @@
     <h2>Select Option</h2>
     <button type="button" onclick="showClients()">Clients</button>
     <button type="button" onclick="showStations()">Stations</button>
+	<button type="button" onclick="showNotifier()">Notifier</button>
     
     <div id="content" style="display:none;">
         
@@ -31,6 +32,18 @@
             
             <button type="button" onclick="sendJson()">Subscribe</button>
         </div>
+		
+		<div id="formAQI" style="display: none;">
+            <h3>Fill your data to get the AQI</h3>
+            <label for="phoneAir">Phone:</label>
+            <input type="text" id="phoneAir" placeholder="Enter phone number">
+            
+            <label for="ipAir">IP:</label>
+            <input type="text" id="ipAir" placeholder="Enter your IP">
+            
+            <button type="button" onclick="loadSlots()">Show free slots</button>
+        </div>
+				
         <h2 id="title"></h2>
         <button type="button" id="requestButton"></button>
         <div id="sectionId">Response will appear here</div>
@@ -42,6 +55,7 @@
             document.getElementById("title").innerText = "Clients";
             document.getElementById("requestButton").innerText = "Show Clients";
             document.getElementById("requestButton").setAttribute("onclick", "loadClients()");
+			document.getElementById("formAQI").style.display = "none";
             document.getElementById("formSection").style.display = "block";
         }
 
@@ -51,6 +65,16 @@
             document.getElementById("requestButton").innerText = "Show Stations";
             document.getElementById("requestButton").setAttribute("onclick", "loadStations()");
             document.getElementById("formSection").style.display = "none";
+			document.getElementById("formAQI").style.display = "none";
+        }
+		
+		function showNotifier() {
+            document.getElementById("content").style.display = "block";
+            document.getElementById("title").innerText = "Notifier";
+            document.getElementById("requestButton").innerText = "Show AQI";
+            document.getElementById("requestButton").setAttribute("onclick", "loadAQI()");
+			document.getElementById("formSection").style.display = "none";
+			document.getElementById("formAQI").style.display = "block";
         }
 
         function loadClients() {
@@ -69,8 +93,8 @@
                     }
                 }
             };
-            //xmlhttp.open("GET", "http://ec2-3-81-227-55.compute-1.amazonaws.com:8080/at-project-0.1/at/clients/getClients", true);
-			xmlhttp.open("GET", "http://localhost:8080/at-project-0.1/at/clients/getClients", true);
+            xmlhttp.open("GET", "http://ec2-3-81-227-55.compute-1.amazonaws.com:8080/at-project-0.1/at/clients/getClients", true);
+			//xmlhttp.open("GET", "http://localhost:8080/at-project-0.1/at/clients/getClients", true);
             xmlhttp.send();
         }
 
@@ -90,9 +114,9 @@
                     }
                 }
             };
-            //xmlhttp.open("GET", "http://ec2-3-81-227-55.compute-1.amazonaws.com:8080/at-project-0.1/at/stations/get", true);
-			xmlhttp.open("GET", "http://localhost:8080/at-project-0.1/at/stations/get", true);
-			xmlhttp.send();
+            xmlhttp.open("GET", "http://ec2-3-81-227-55.compute-1.amazonaws.com:8080/at-project-0.1/at/stations/get", true);
+			//xmlhttp.open("GET", "http://localhost:8080/at-project-0.1/at/stations/get", true);
+            xmlhttp.send();
         }
 
         function sendJson() {
@@ -108,11 +132,64 @@
                     document.getElementById("sectionId").innerHTML = xmlhttp.responseText;
                 }
             };
-            //xmlhttp.open("POST", "http://ec2-3-81-227-55.compute-1.amazonaws.com:8080/at-project-0.1/at/clients/subscribe", true);
-			xmlhttp.open("POST", "http://localhost:8080/at-project-0.1/at/clients/subscribe", true);
+            xmlhttp.open("POST", "http://ec2-3-81-227-55.compute-1.amazonaws.com:8080/at-project-0.1/at/clients/subscribe", true);
+			//xmlhttp.open("POST", "http://localhost:8080/at-project-0.1/at/clients/subscribe", true);
 			xmlhttp.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
             xmlhttp.send(JSON.stringify(params));
         }
+		
+
+		function loadAQI() {
+		    var params = {
+		        "phone": document.getElementById("phoneAir").value,
+		        "ip": document.getElementById("ipAir").value
+		    };
+		    
+			var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					try {
+						var responseText = xmlhttp.responseText; // Read response as a string
+						document.getElementById("sectionId").innerHTML = 
+							"<pre style='background-color: #f4f4f4; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 14px;'>" +
+						     responseText + "</pre>";
+                    } catch (error) {
+						console.error("Error processing response", error);
+						document.getElementById("sectionId").innerHTML =
+						     "<p style='color: red;'>Error displaying response</p>";
+                    }
+                }
+            };
+			xmlhttp.open("GET", "http://ec2-3-81-227-55.compute-1.amazonaws.com:8080/at-project-0.1/at/notifier/airQuality/"+encodeURIComponent(params.ip)+"/"+encodeURIComponent(params.phone), true);
+			//xmlhttp.open("GET", "http://localhost:8080/at-project-0.1/at/notifier/airQuality/"+encodeURIComponent(params.ip)+"/"+encodeURIComponent(params.phone), true);
+            xmlhttp.send();		
+			
+        }
+		
+		function loadSlots() {
+		    var params = {
+		        "phone": document.getElementById("phoneAir").value,
+			};
+		    
+			var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    try {
+						var responseText = xmlhttp.responseText; // Read response as a string
+						document.getElementById("sectionId").innerHTML = 
+							"<pre style='background-color: #f4f4f4; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 14px;'>" +
+						     responseText + "</pre>";
+                    } catch (error) {
+						console.error("Error processing response", error);
+						document.getElementById("sectionId").innerHTML =
+						     "<p style='color: red;'>Error displaying response</p>";
+                    }
+                }
+            };
+			xmlhttp.open("GET", "http://ec2-3-81-227-55.compute-1.amazonaws.com:8080/at-project-0.1/at/notifier/slots/"+encodeURIComponent(params.phone), true);
+			//xmlhttp.open("GET", "http://localhost:8080/at-project-0.1/at/notifier/slots/"+encodeURIComponent(params.phone), true);
+            xmlhttp.send();
+		}
     </script>
 </body>
 </html>
