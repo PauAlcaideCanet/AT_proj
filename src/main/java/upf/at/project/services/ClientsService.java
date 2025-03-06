@@ -16,8 +16,15 @@ public class ClientsService {
 	@Path("/subscribe")
 	@Consumes(MediaType.APPLICATION_JSON)
 	//Consumes the client number, telegram token and list of stations ids
-	public void subscribe(User client) {
-		clients.subscribeClient(client);
+	public Response subscribe(User client) {
+		try {
+			clients.subscribeClient(client);
+			return Response.ok("You have successfully subscribed!").build();
+		} catch (Exception e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+						   .entity("There has been a problem in the subscription process")
+						   .build();
+		}
 	}
 	
 	@GET
