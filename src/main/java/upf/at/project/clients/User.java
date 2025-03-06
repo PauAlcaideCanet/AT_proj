@@ -47,6 +47,6 @@ public class User {
 	//toString
 	@Override
 	public String toString() {
-		return "Client [phone=" + phone + ", subStationsId=" + subStationsId + ", telegramToken=" + telegramToken + "]";
+		return "\"Client\" : [phone=" + phone + ", subStationsId=" + subStationsId + ", telegramToken=" + telegramToken + "]";
 	}
 }
