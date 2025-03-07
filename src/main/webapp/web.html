@@ -93,7 +93,7 @@
                     }
                 }
             };
-            xmlhttp.open("GET", "http://ec2-3-81-227-55.compute-1.amazonaws.com:8080/at-project-0.1/at/clients/getClients", true);
+            xmlhttp.open("GET", "http://ec2-3-91-76-93.compute-1.amazonaws.com:8080/at-project-0.1/at/clients/getClients", true);
 			//xmlhttp.open("GET", "http://localhost:8080/at-project-0.1/at/clients/getClients", true);
             xmlhttp.send();
         }
@@ -114,7 +114,7 @@
                     }
                 }
             };
-            xmlhttp.open("GET", "http://ec2-3-81-227-55.compute-1.amazonaws.com:8080/at-project-0.1/at/stations/get", true);
+            xmlhttp.open("GET", "http://ec2-3-91-76-93.compute-1.amazonaws.com:8080/at-project-0.1/at/stations/get", true);
 			//xmlhttp.open("GET", "http://localhost:8080/at-project-0.1/at/stations/get", true);
             xmlhttp.send();
         }
@@ -132,7 +132,7 @@
                     document.getElementById("sectionId").innerHTML = xmlhttp.responseText;
                 }
             };
-            xmlhttp.open("POST", "http://ec2-3-81-227-55.compute-1.amazonaws.com:8080/at-project-0.1/at/clients/subscribe", true);
+            xmlhttp.open("POST", "http://ec2-3-91-76-93.compute-1.amazonaws.com:8080/at-project-0.1/at/clients/subscribe", true);
 			//xmlhttp.open("POST", "http://localhost:8080/at-project-0.1/at/clients/subscribe", true);
 			xmlhttp.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
             xmlhttp.send(JSON.stringify(params));
@@ -160,7 +160,7 @@
                     }
                 }
             };
-			xmlhttp.open("GET", "http://ec2-3-81-227-55.compute-1.amazonaws.com:8080/at-project-0.1/at/notifier/airQuality/"+encodeURIComponent(params.ip)+"/"+encodeURIComponent(params.phone), true);
+			xmlhttp.open("GET", "http://ec2-3-91-76-93.compute-1.amazonaws.com:8080/at-project-0.1/at/notifier/airQuality/"+encodeURIComponent(params.ip)+"/"+encodeURIComponent(params.phone), true);
 			//xmlhttp.open("GET", "http://localhost:8080/at-project-0.1/at/notifier/airQuality/"+encodeURIComponent(params.ip)+"/"+encodeURIComponent(params.phone), true);
             xmlhttp.send();		
 			
@@ -186,7 +186,7 @@
                     }
                 }
             };
-			xmlhttp.open("GET", "http://ec2-3-81-227-55.compute-1.amazonaws.com:8080/at-project-0.1/at/notifier/slots/"+encodeURIComponent(params.phone), true);
+			xmlhttp.open("GET", "http://ec2-3-91-76-93.compute-1.amazonaws.com:8080/at-project-0.1/at/notifier/slots/"+encodeURIComponent(params.phone), true);
 			//xmlhttp.open("GET", "http://localhost:8080/at-project-0.1/at/notifier/slots/"+encodeURIComponent(params.phone), true);
             xmlhttp.send();
 		}

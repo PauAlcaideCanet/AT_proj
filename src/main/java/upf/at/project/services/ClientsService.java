@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import upf.at.project.clients.User;
 import upf.at.project.clients.Users;
