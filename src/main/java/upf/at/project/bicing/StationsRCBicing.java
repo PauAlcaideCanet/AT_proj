@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 
 public class StationsRCBicing {
 	
-	private Data data;
+	private static Data data;
     private Date lastUpdateTime;
     private static final long TIMEOUT = 120_000;
     final static Logger logger = Logger.getLogger(StationsRCBicing.class);
@@ -24,8 +24,9 @@ public class StationsRCBicing {
 					header("Authorization", "5fbf9a6fa8f1b0fba915e7891a4b5aa807e6c257520cb8d5ad5e3dfc9846677a")
 					.get(new GenericType<Data>() {});
 			lastUpdateTime = new Date();
-		}
-		logger.debug("Stations: " + data);
+			logger.debug("You are using the bicing AIP");
+		}else {logger.debug("You are using the cache memory");}
+		
 		return data;
 		
 	}
