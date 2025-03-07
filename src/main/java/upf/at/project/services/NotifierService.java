@@ -7,7 +7,7 @@ import java.util.*;
 
 import upf.at.project.bicing.Data;
 import upf.at.project.bicing.Station;
-import upf.at.project.clients.StationsRCBicing;
+import upf.at.project.bicing.StationsRCBicing;
 import upf.at.project.clients.User;
 import upf.at.project.notifier.Aqi;
 import upf.at.project.notifier.Message;

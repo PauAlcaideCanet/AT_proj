@@ -4,7 +4,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
 import upf.at.project.bicing.*;
-import upf.at.project.clients.StationsRCBicing;
 
 @Path("/stations")
 public class StationsService {
